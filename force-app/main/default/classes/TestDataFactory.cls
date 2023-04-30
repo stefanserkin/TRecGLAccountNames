@@ -2,7 +2,7 @@
 public class TestDataFactory {
     
     /***********************************
-     * Static Variables
+     * Static variables
      ***********************************/    
 
     private static Id householdRecordTypeId;
@@ -12,24 +12,31 @@ public class TestDataFactory {
     private static Id rentalContractRentalRTId;
     private static Id facilityBookingRTId;
     private static Id standardTransactionRecTypeId;
+    private static Id manualAdjustmentTLIRecTypeId;
     private static Id punchPassRecTypeId;
     private static Id membershipTypePunchPassRecTypeId;
     private static Id membershipCategoryPunchPassRecTypeId;
+
+    private static Id globalBillingGroupId;
+    private static String glCodeAccountsReceivable;
+    private static Map<String, Id> mapProcessorProfileNameToId;
     
     /***********************************
      * Constants
      ***********************************/
 
+    // Accounting Events (TREX1)
+    private static final String AE_TYPE_MANUAL_ADJUSTMENT = 'Manual Adjustment';
     // Accounts
 	private static final String ACCOUNT_BASE_NAME = 'Wright Household';
     private static final String ORGANIZATION_BASE_NAME = 'Big Corp';
-    // Affiliations
+    // Affiliations (npsp)
     private static final String AFFILIATION_STATUS_CURRENT = 'Current';
     private static final String AFFILIATION_STATUS_FORMER = 'Former';
-    // Availability Profiles
+    // Availability Profiles (TREX1)
     private static final String AVAILABILITY_PROFILE_BASE_NAME = 'Test Default';
     private static final String AVAILABILITY_PROFILE_DAILY_HOURS = '12:00am-11:59pm';
-    // Bookings
+    // Bookings (TREX1)
     private static final Integer BOOKING_SETUP_TIME_REQUIRED = 0;
     private static final Integer BOOKING_TEAR_DOWN_TIME_REQUIRED = 0;
     private static final String BOOKING_STATUS = 'Draft';
@@ -49,37 +56,59 @@ public class TestDataFactory {
     private static final Date CONTACT_BASE_BIRTHDATE = Date.today().addYears(-21);
     // Course Options (TREX1)
     private static final String COURSE_OPTION_TYPE_STANDARD = 'Standard Course Option';
-    // Facilities
+    // Facilities (TREX1)
     private static final String FACILITY_BASE_NAME = 'Test Facility';
     private static final String FACILITY_TYPE = 'Gym';
-    // Functions
+    // Functions (TREX1)
     private static final String FUNCTION_BASE_NAME = 'Test Function';
     private static final String BCO_BASE_NAME = 'Test BCO';
+    // GL Accounts (TREX1)
+    private static final String GL_ACCOUNT_BASE_NAME = 'GL Account ';
+    private static final String GL_ACCOUNT_BASE_CODE = '44-44-444-4444';
+    private static final String GL_ACCOUNT_TYPE_INCOME = 'Income';
+    private static final String FUND_GL_CODE = '44-44-444-44444';
+    // Global Billing Groups (TREX1)
+    private static final String GBG_NAME = 'Asphalt Green';
+    private static final Integer GBG_BILLING_DAY = 1;
+    private static final String GBG_COMMUNITY_BILL_TO_ACCOUNT = 'Disabled';
+    private static final String GBG_SURCHARGE_CONFIGURATION = 'Disabled';
+    // Global GL Accounts (TREX1)
+    private static final String AR_GL_CODE = '10-10-000-12504';
     // Groups
     private static final String PUBLIC_GROUP_NAME = 'Test Group Test';
     private static final String GROUP_TYPE_REGULAR = 'Regular';
-    // Locations
+    // Journal Entries (TREX1)
+    public static final String ADJUSTMENT_TYPE_DEBIT = 'Debit';
+    public static final String ADJUSTMENT_TYPE_CREDIT = 'Credit';
+    public static final String JE_TYPE_MANUAL_ADJUSTMENT = 'Manual Adjustment';
+    // Locations (TREX1)
     private static final String LOCATION_BASE_NAME = 'Flushing';
-    // Memberships
+    // Memberships (TREX1)
     private static final String VALID_MEMBERSHIP_CATEGORY = 'Pilates';
     private static final String MEMBERSHIP_STATUS_ACTIVE = 'Active';
     private static final String MEMBERSHIP_STATUS_COMPLETE = 'Complete';
-    // Membership Categories
+    // Membership Categories (TREX1)
     private static final String MEMBERSHIP_CATEGORY_BASE_NAME = 'Test Membership Category';
-    // Programs
+    // Processor Profiles (tpay)
+    private static final String PROFILE_NAME_VANTIV = 'Vantiv IP Settings';
+    private static final String PROFILE_NAME_NONINTEGRATED = 'Non-Integrated Processor';
+    private static final String VIP_ACCEPTOR_ID = '3928907';
+    private static final String VIP_ACCOUNT_ID = '1012840';
+    private static final String VIP_ACCOUNT_TOKEN = 'E025C80579D6CD4CF45EB7561CD7CA451FC828DE59C1E683DCE23FEC62DBFCB681713401';
+    // Programs (TREX1)
     private static final String PROGRAM_BASE_NAME = 'Test Program';
-    // Registrations
+    // Registrations (TREX1)
     private static final String REGISTRATION_STATUS_PENDING_ACTIVE = 'Pending Active';
     private static final String REGISTRATION_STATUS_ACTIVE = 'Active';
     private static final String REGISTRATION_STATUS_COMPLETE = 'Complete';
-    // Rental Contracts
+    // Rental Contracts (TREX1)
     private static final String RENTAL_CONTRACT_PAYMENT_OPTION = 'On Transaction Firm';
     private static final String RENTAL_CONTRACT_STATUS = 'Draft';
     // Rental Rates
     private static final String RENTAL_RATE_BASE_NAME = 'Test Rental Rate';
     private static final String INCREMENTAL_RATE_RT_NAME = RentalRateUtilities.INCREMENTAL_RECORD_TYPE_NAME;
     private static final String STANDARD_RATE_RT_NAME = RentalRateUtilities.STANDARD_RECORD_TYPE_NAME;
-    // Rules
+    // Rules (TREX1)
     private static final String RULE_BASE_NAME = 'Test Rule';
     // Scheduled Rules
     private static final String SCHEDULED_RULE_BASE_NAME = 'Test Scheduled Rule';
@@ -95,11 +124,26 @@ public class TestDataFactory {
     private static final Integer SERVICE_SCHEDULE_DEFAULT_SERVICE_QUANTITY = 1;
     // Service Participants (pmdm)
     private static final String SERVICE_PARTICIPANT_STATUS_ENROLLED = 'Enrolled';
-    // Staff
+    // Staff (TREX1)
     private static final String STAFF_NAME = 'Ince Structor';
+    // Tender Types (tpay)
+    private static final String TENDER_TYPE_CASH = 'Cash';
+    private static final String TENDER_TYPE_CHECK = 'Check';
+    private static final String NONINTEGRATED_TYPE_CASH = 'Cash';
+    private static final String NONINTEGRATED_TYPE_CHECK = 'Physical Check';
+    private static final String TENDER_TYPE_CC = 'Credit Card';
+    private static final String CARD_TYPE_NON_INTEGRATED = 'Non-Integrated';
+    private static final String CARD_TYPE_CC = 'Credit';
+    private static final String CARD_SCHEME_VISA = 'Visa';
     // Transactions (TREX1)
     private static final String TRANSACTION_STATUS_CLOSE = 'Close';
+    private static final String TRANSACTION_STATUS_DRAFT = 'Draft';
     private static final String TRANSACTION_RECEIPT_NAME = 'Receipt-039483628948267346';
+    // Transaction Line Items (TREX1)
+    private static final String TLI_EVENT_TYPE_MANUAL_ADJUSTMENT = 'Manual Adjustment';
+    private static final String TLI_STATUS_COMPLETE = 'Complete';
+    private static final String TLI_STATUS_DRAFT = 'Draft';
+    private static final String TLI_TYPE = 'Item Event';
     // Users
     private static final String EMAIL_ENCODING_KEY = 'UTF-8';
     private static final String STANDARD_USER_USERNAME = 'standarduser' + DateTime.now().getTime() + '@agtests.com';
@@ -109,6 +153,29 @@ public class TestDataFactory {
     private static final String STANDARD_USER_ALIAS = 'tester';
     private static final String STANDARD_USER_NICKNAME = 'TestUser193948';
     private static final String STANDARD_USER_PROFILE_NAME = 'Standard User';
+
+
+    /***********************************
+     * Accounting Events (TREX1)
+     ***********************************/
+
+     public static TREX1__Accounting_Event__c createManualAdjustmentAccountingEvent(
+        TREX1__Transaction__c trans,
+        TREX1__Transaction_Line_Item__c tli,
+        Decimal amount
+    ) {
+        TREX1__Accounting_Event__c ae = new TREX1__Accounting_Event__c();
+        ae.TREX1__Transaction__c = trans.Id;
+        ae.TREX1__Transaction_Line_Item__c = tli.Id;
+        ae.TREX1__Effective_Date__c = Date.today();
+        ae.TREX1__Effective_Date_Time__c = Datetime.now();
+        ae.TREX1__Type__c = AE_TYPE_MANUAL_ADJUSTMENT;
+        ae.TREX1__Total__c = amount;
+        ae.TREX1__Annotation__c = 'Balance Transfer';
+        ae.TREX1__Account__c = trans.TREX1__Account__c;
+        ae.TREX1__Contact__c = trans.TREX1__Contact__c;
+        return ae;
+    }
 
 
     /***********************************
@@ -630,7 +697,7 @@ public class TestDataFactory {
 
 
     /***********************************
-     * Functions
+     * Functions (TREX1)
      ***********************************/
 
     /**
@@ -655,6 +722,79 @@ public class TestDataFactory {
 
 
     /***********************************
+     * GL Accounts (TREX1)
+     ***********************************/
+
+    /**
+     * Create gl accounts
+     * No DML - returns unsaved list of sObjects
+     * @param Integer Number of records to create
+     */
+
+    public static List<TREX1__GL_Account__c> createGlAccounts(
+        Integer numberOfAccounts
+    ) {
+        List<TREX1__GL_Account__c> lstGlAccounts = new List<TREX1__GL_Account__c>();
+        for (Integer i = 0; i < numberOfAccounts; i++) {
+            lstGlAccounts.add(
+                new TREX1__GL_Account__c(
+                    Name = GL_ACCOUNT_BASE_NAME + String.valueOf(i),
+                    TREX1__Active__c = true,
+                    TREX1__GL_Account_Number__c = GL_ACCOUNT_BASE_CODE + String.valueOf(i),
+                    TREX1__Type__c = GL_ACCOUNT_TYPE_INCOME
+                )
+            );
+        }
+        return lstGlAccounts;
+    }
+
+    /***********************************
+     * Global Billing Groups (TREX1)
+     ***********************************/
+
+    // Record is created and inserted
+    public static TREX1__Global_Billing_Group__c createGlobalBillingGroup() {
+        TREX1__Global_Billing_Group__c gbg = new TREX1__Global_Billing_Group__c();
+        gbg.Name = GBG_NAME;
+        gbg.TREX1__Public_Name__c = GBG_NAME;
+        gbg.TREX1__Monthly_Billing_Day__c = GBG_BILLING_DAY;
+        gbg.TREX1__Community_Bill_To_Account__c = GBG_COMMUNITY_BILL_TO_ACCOUNT;
+        gbg.TREX1__Surcharge_Configuration__c = GBG_SURCHARGE_CONFIGURATION;
+        insert gbg;
+        return gbg;
+    }
+
+    // Get id for cached gbg or create gbg and return id
+    public static Id getGlobalBillingGroupId() {
+        if (globalBillingGroupId == null) {
+            globalBillingGroupId = createGlobalBillingGroup().Id;
+        }
+        return globalBillingGroupId;
+    }
+
+
+    /***********************************
+     * Global GL Accounts (TREX1)
+     ***********************************/
+
+    // Record is created and inserted
+    public static TREX1__Global_GL_Accounts__c createGlobalGLAccounts() {
+        TREX1__Global_GL_Accounts__c globalGls = TREX1__Global_GL_Accounts__c.getOrgDefaults();
+        globalGls.TREX1__Accounts_Receivable__c = AR_GL_CODE;
+        upsert globalGls;
+        return globalGls;
+    }
+
+    // Get code for cached ar gl code
+    public static String getAccountsReceivableGlCode() {
+        if (glCodeAccountsReceivable == null) {
+            glCodeAccountsReceivable = createGlobalGLAccounts().TREX1__Accounts_Receivable__c;
+        }
+        return glCodeAccountsReceivable;
+    }
+
+
+    /***********************************
      * Groups
      ***********************************/
 
@@ -671,6 +811,57 @@ public class TestDataFactory {
             DoesSendEmailToMembers = false
         );
         return newGroup;
+    }
+
+
+    /***********************************
+     * Journal Entries (TREX1)
+     ***********************************/
+
+    /**
+     * Create journal entries for a manual adjustment
+     * @param List<TREX1__Accounting_Event__c> list of accounting events
+     * @param String gl code to adjust (the other je will adjust accounts receivable)
+     * @param String adjustment type - 'Debit' or 'Credit' the gl code to adjust
+     * @return List<TREX1__Transaction__c> Transactions
+     */
+
+     public static List<TREX1__Journal_Entry__c> createManualAdjustmentJournalEntries(
+        TREX1__Accounting_Event__c ae,
+        String glCode,
+        String adjustmentType
+    ) {
+        List<TREX1__Journal_Entry__c> lstJEs = new List<TREX1__Journal_Entry__c>();
+        // Debit
+        TREX1__Journal_Entry__c debit = new TREX1__Journal_Entry__c();
+        debit.TREX1__Transaction__c = ae.TREX1__Transaction__c;
+        debit.TREX1__Transaction_Line_Item__c = ae.TREX1__Transaction_Line_Item__c;
+        debit.TREX1__Effective_Date_Time__c = Datetime.now();
+        debit.TREX1__Account__c = ae.TREX1__Account__c;
+        debit.TREX1__Contact__c = ae.TREX1__Contact__c;
+        debit.TREX1__Accounting_Event__c = ae.Id;
+        debit.TREX1__GL_Code__c = adjustmentType == ADJUSTMENT_TYPE_DEBIT ? glCode : getAccountsReceivableGlCode();
+        System.debug('::::::: debit gl code: ' + debit.TREX1__GL_Code__c);
+        System.debug('::::::: ar gl code: ' + getAccountsReceivableGlCode());
+        debit.TREX1__Type__c = JE_TYPE_MANUAL_ADJUSTMENT;
+        debit.TREX1__Debit__c = ae.TREX1__Total__c;
+        debit.TREX1__Credit__c = 0;
+        lstJEs.add(debit);
+        // Credit
+        TREX1__Journal_Entry__c credit = new TREX1__Journal_Entry__c();
+        credit.TREX1__Transaction__c = ae.TREX1__Transaction__c;
+        credit.TREX1__Transaction_Line_Item__c = ae.TREX1__Transaction_Line_Item__c;
+        credit.TREX1__Effective_Date_Time__c = Datetime.now();
+        credit.TREX1__Account__c = ae.TREX1__Account__c;
+        credit.TREX1__Contact__c = ae.TREX1__Contact__c;
+        credit.TREX1__Accounting_Event__c = ae.Id;
+        credit.TREX1__GL_Code__c = adjustmentType == ADJUSTMENT_TYPE_CREDIT ? glCode : getAccountsReceivableGlCode();
+        credit.TREX1__Type__c = JE_TYPE_MANUAL_ADJUSTMENT;
+        credit.TREX1__Debit__c = 0;
+        credit.TREX1__Credit__c = ae.TREX1__Total__c;
+        lstJEs.add(credit);
+
+        return lstJEs;
     }
 
 
@@ -933,6 +1124,55 @@ public class TestDataFactory {
             }
         }
         return lstMembershipTypes;
+    }
+
+
+    /***********************************
+     * Processor Profiles (tpay)
+     ***********************************/
+
+    public static Id getProcessorProfileIdByName(String profileName) {
+        if (mapProcessorProfileNameToId == null) {
+            mapProcessorProfileNameToId = new Map<String, Id>();
+            for (tpay__Processor_Profile__c pp : createProcessorProfiles()) {
+                mapProcessorProfileNameToId.put(pp.Name, pp.Id);
+            }
+        }
+        return mapProcessorProfileNameToId.get(profileName);
+    }
+
+    private static List<tpay__Processor_Profile__c> createProcessorProfiles() {
+        List<tpay__Processor_Profile__c> lstProfiles = new List<tpay__Processor_Profile__c>();
+        lstProfiles.add(getVantivProfile());
+        lstProfiles.add(getNonIntegratedProfile());
+        return lstProfiles;
+    }
+
+    private static tpay__Processor_Profile__c getVantivProfile() {
+        tpay__Processor_Profile__c vp = new tpay__Processor_Profile__c();
+        vp.RecordTypeId = Schema.SObjectType.tpay__Processor_Profile__c.getRecordTypeInfosByName()
+            .get(PROFILE_NAME_VANTIV).getRecordTypeId();
+        vp.Name = PROFILE_NAME_VANTIV;
+        vp.tpay__Active__c = true;
+        vp.tpay__Capture_AVS__c = 'ZIP Optional';
+        vp.tpay__Capture_CVV__c = 'Optional';
+        vp.tpay__TenderEntryMethod__c = 'Present Options';
+        vp.tpay__TransactionSetupRetries__c = 10;
+        vp.tpay__VIP_AcceptorID__c = VIP_ACCEPTOR_ID;
+        vp.tpay__VIP_AccountID__c = VIP_ACCOUNT_ID;
+        vp.tpay__VIP_AccountToken__c = VIP_ACCOUNT_TOKEN;
+        return vp;
+    }
+
+    private static tpay__Processor_Profile__c getNonIntegratedProfile() {
+        tpay__Processor_Profile__c nip = new tpay__Processor_Profile__c();
+        nip.RecordTypeId = Schema.SObjectType.tpay__Processor_Profile__c.getRecordTypeInfosByName()
+            .get(PROFILE_NAME_NONINTEGRATED).getRecordTypeId();
+        nip.Name = PROFILE_NAME_NONINTEGRATED;
+        nip.tpay__Active__c = true;
+        nip.tpay__TenderEntryMethod__c = 'Onscreen Only';
+        nip.tpay__TransactionSetupRetries__c = 0;
+        return nip;
     }
 
     
@@ -1523,6 +1763,70 @@ public class TestDataFactory {
         return lstSchedules;
     }
 
+
+    /***********************************
+     * Tender Types (tpay)
+     ***********************************/
+
+    public static void createTenderTypes() {
+        List<tpay__Tender_Type__c> lstTenderTypes = new List<tpay__Tender_Type__c>();
+        // Cash
+        tpay__Tender_Type__c ttCash = new tpay__Tender_Type__c();
+        ttCash.Non_Integrated_Type__c = NONINTEGRATED_TYPE_CASH;
+        ttCash.tpay__Active__c = true;
+        ttCash.tpay__CardType__c = CARD_TYPE_NON_INTEGRATED;
+        ttCash.tpay__Processor_Profile__c = getProcessorProfileIdByName(PROFILE_NAME_NONINTEGRATED);
+        ttCash.tpay__Tender_Label__c = TENDER_TYPE_CASH;
+        ttCash.tpay__Tender_Name__c = TENDER_TYPE_CASH;
+        lstTenderTypes.add(ttCash);
+        // Check
+        tpay__Tender_Type__c ttCheck = new tpay__Tender_Type__c();
+        ttCheck.Non_Integrated_Type__c = NONINTEGRATED_TYPE_CHECK;
+        ttCheck.tpay__Active__c = true;
+        ttCheck.tpay__CardType__c = CARD_TYPE_NON_INTEGRATED;
+        ttCheck.tpay__Processor_Profile__c = getProcessorProfileIdByName(PROFILE_NAME_NONINTEGRATED);
+        ttCheck.tpay__Tender_Label__c = TENDER_TYPE_CHECK;
+        ttCheck.tpay__Tender_Name__c = TENDER_TYPE_CHECK;
+        lstTenderTypes.add(ttCheck);
+        // Credit Card
+        tpay__Tender_Type__c ttCredit = new tpay__Tender_Type__c();
+        ttCredit.tpay__Active__c = true;
+        ttCredit.tpay__Allow_Automated_Billing__c = true;
+        ttCredit.tpay__Allow_Edit_On_Community__c = true;
+        ttCredit.tpay__Available_For_Stored_Account__c = true;
+        ttCredit.tpay__Card_Scheme__c = CARD_SCHEME_VISA;
+        ttCredit.tpay__CardType__c = CARD_TYPE_CC;
+        ttCredit.tpay__Processor_Profile__c = getProcessorProfileIdByName(PROFILE_NAME_VANTIV);
+        ttCredit.tpay__Tender_Label__c = TENDER_TYPE_CC;
+        ttCredit.tpay__Tender_Name__c = TENDER_TYPE_CC;
+        lstTenderTypes.add(ttCredit);
+
+        insert lstTenderTypes;
+
+        List<GBG_Allowed_Tender_Type__c> lstAllowedGBGs = new List<GBG_Allowed_Tender_Type__c>();
+        for (tpay__Tender_Type__c tt : lstTenderTypes) {
+            GBG_Allowed_Tender_Type__c agbg = new GBG_Allowed_Tender_Type__c();
+            agbg.Tender_Type__c = tt.Id;
+            agbg.Global_Billing_Group__c = globalBillingGroupId;
+            agbg.Front_Desk_Immediate__c = true;
+            agbg.Front_Desk_Recurring__c = tt.tpay__CardType__c == CARD_TYPE_NON_INTEGRATED ? false : true;
+            lstAllowedGBGs.add(agbg);
+
+            // For credit cards, insert additional link for online options
+            if (tt.tpay__CardType__c != CARD_TYPE_NON_INTEGRATED) {
+                GBG_Allowed_Tender_Type__c oAgbg = new GBG_Allowed_Tender_Type__c();
+                oAgbg.Tender_Type__c = tt.Id;
+                oAgbg.Global_Billing_Group__c = globalBillingGroupId;
+                oAgbg.Front_Desk_Immediate__c = false;
+                oAgbg.Front_Desk_Recurring__c = false;
+                oAgbg.Online_Immediate__c = true;
+                oAgbg.Online_Recurring__c = true;
+                lstAllowedGBGs.add(oAgbg);
+            }
+        }
+        insert lstAllowedGBGs;
+    }
+
     /***********************************
      * Transactions (TREX1)
      ***********************************/
@@ -1531,7 +1835,6 @@ public class TestDataFactory {
      * Create a transaction for a contact and account
      * Inserts records to use id in receipt attachment
      * @param Contact transaction contact
-     * @param Account household
      * @return List<TREX1__Transaction__c> Transactions
      */
 
@@ -1558,6 +1861,87 @@ public class TestDataFactory {
         insert attach;
 
         return trans;
+    }
+
+    /**
+     * Create a manual adjustment transaction for a contact and account, complete with 
+     * transaction line items, accounting events and journal entries
+     * @param Contact transaction contact
+     * @param Decimal transaction amount
+     * @param String gl code to adjust
+     * @param String adjustment type - 'Debit' or 'Credit'
+     * @return List<TREX1__Transaction__c> Transactions
+     */
+
+    public static TREX1__Transaction__c createManualAdjustmentTransaction(
+        Contact contact,
+        Decimal amount,
+        String glCode,
+        String adjustmentType
+    ) {
+        if (standardTransactionRecTypeId == null) {
+            standardTransactionRecTypeId = Schema.SObjectType.TREX1__Transaction__c.getRecordTypeInfosByDeveloperName().get('Standard').getRecordTypeId();
+        }
+
+        // Transaction
+        TREX1__Transaction__c trans = new TREX1__Transaction__c();
+        trans.RecordTypeId = standardTransactionRecTypeId;
+        trans.TREX1__Account__c = contact.AccountId;
+        trans.TREX1__Contact__c = contact.Id;
+        trans.TREX1__Public_Visibility__c = true;
+        trans.TREX1__Status__c = TRANSACTION_STATUS_DRAFT;
+        insert trans;
+
+        // Transaction line item
+        TREX1__Transaction_Line_Item__c tli = createManualAdjustmentTLI(trans, amount);
+        insert tli;
+        
+        // Accounting event
+        TREX1__Accounting_Event__c ae = createManualAdjustmentAccountingEvent(trans, tli, amount);
+        insert ae;
+
+        // Journal entries
+        List<TREX1__Journal_Entry__c> lstJEs = createManualAdjustmentJournalEntries(
+            ae,
+            glCode,
+            adjustmentType
+        );
+        insert lstJEs;
+
+        return trans;
+    }
+
+
+    /***********************************
+     * Transaction Line Items (TREX1)
+     ***********************************/
+
+    public static TREX1__Transaction_Line_Item__c createManualAdjustmentTLI(
+        TREX1__Transaction__c trans,
+        Decimal amount
+    ) {
+        if (manualAdjustmentTLIRecTypeId == null) {
+            manualAdjustmentTLIRecTypeId = Schema.SObjectType.TREX1__Transaction_Line_Item__c.getRecordTypeInfosByDeveloperName().get('Manual_Adjustment').getRecordTypeId();
+        }
+
+        TREX1__Transaction_Line_Item__c tli = new TREX1__Transaction_Line_Item__c(
+            RecordTypeId = manualAdjustmentTLIRecTypeId,
+            TREX1__Transaction__c = trans.Id,
+            TREX1__Contact__c = trans.TREX1__Contact__c,
+            TREX1__Transaction_Contact__c = trans.TREX1__Contact__c,
+            TREX1__Account__c = trans.TREX1__Account__c,
+            TREX1__Initial_Fee_Amount__c = amount,
+            TREX1__Deferred_Revenue_Recognition_Finished__c = true,
+            TREX1__Description__c = 'Test adjustment',
+            TREX1__Effective_Date__c = Date.today(),
+            TREX1__Event_Type__c = TLI_EVENT_TYPE_MANUAL_ADJUSTMENT,
+            TREX1__Net_Price__c = amount,
+            TREX1__Status__c = TLI_STATUS_DRAFT,
+            TREX1__Type__c = TLI_TYPE,
+            TREX1__tli_Global_Billing_Group__c = getGlobalBillingGroupId(),
+            TREX1__On_Close_Actions__c = 'No Action'
+        );
+        return tli;
     }
 
 
