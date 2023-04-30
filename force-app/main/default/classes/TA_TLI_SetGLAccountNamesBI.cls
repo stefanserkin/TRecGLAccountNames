@@ -1,4 +1,4 @@
-public with sharing class TA_TLI_SetGLAccountNamesBI implements TriggerAction.BeforeInsert {
+public class TA_TLI_SetGLAccountNamesBI implements TriggerAction.BeforeInsert {
     
     public void beforeInsert(List<TREX1__Transaction_Line_Item__c> newList) {
         // Get map of gl codes to names from singleton utility
@@ -11,7 +11,7 @@ public with sharing class TA_TLI_SetGLAccountNamesBI implements TriggerAction.Be
             // Initial account primary
             tli.GL_Account_Initial_Primary_Name__c = mapGlCodeToName.get(tli.TREX1__GL_Account_Initial_Primary__c);
             // Initial account secondary
-            tli.GL_Account_Deferred_Fee_Primary_Name__c = mapGlCodeToName.get(tli.TREX1__GL_Account_Deferred_Primary__c);
+            tli.GL_Account_Initial_Secondary_Name__c = mapGlCodeToName.get(tli.TREX1__GL_Account_Initial_Secondary__c);
         }
     }
 

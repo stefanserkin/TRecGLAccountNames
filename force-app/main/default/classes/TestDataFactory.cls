@@ -16,7 +16,7 @@ public class TestDataFactory {
     private static Id punchPassRecTypeId;
     private static Id membershipTypePunchPassRecTypeId;
     private static Id membershipCategoryPunchPassRecTypeId;
-
+    
     private static Id globalBillingGroupId;
     private static String glCodeAccountsReceivable;
     private static Map<String, Id> mapProcessorProfileNameToId;
@@ -73,7 +73,10 @@ public class TestDataFactory {
     private static final String GBG_COMMUNITY_BILL_TO_ACCOUNT = 'Disabled';
     private static final String GBG_SURCHARGE_CONFIGURATION = 'Disabled';
     // Global GL Accounts (TREX1)
-    private static final String AR_GL_CODE = '10-10-000-12504';
+    private static final String GL_CODE_AR = '10-10-000-12504';
+    private static final String GL_CODE_DEFERRED = '10-10-000-23001';
+    private static final String GL_CODE_CASH = '10-10-000-10020';
+    private static final String GL_CODE_CREDIT = '10-10-000-10023';
     // Groups
     private static final String PUBLIC_GROUP_NAME = 'Test Group Test';
     private static final String GROUP_TYPE_REGULAR = 'Regular';
@@ -780,8 +783,17 @@ public class TestDataFactory {
     // Record is created and inserted
     public static TREX1__Global_GL_Accounts__c createGlobalGLAccounts() {
         TREX1__Global_GL_Accounts__c globalGls = TREX1__Global_GL_Accounts__c.getOrgDefaults();
-        globalGls.TREX1__Accounts_Receivable__c = AR_GL_CODE;
+        globalGls.TREX1__Accounts_Receivable__c = GL_CODE_AR;
+        globalGls.TREX1__Deferred_Revenue_Account__c = GL_CODE_DEFERRED;
+        globalGls.TREX1__High_AR_Length__c = 90;
+        globalGls.TREX1__Medium_AR_Length__c = 60;
+        globalGls.TREX1__Low_AR_Length__c = 30;
+        globalGls.TREX1__Payment_Account_Cash__c = GL_CODE_CASH;
+        globalGls.TREX1__Payment_Account_Physical_Check__c = GL_CODE_CASH;
+        globalGls.TREX1__Payment_Account_Credit_Card__c = GL_CODE_CREDIT;
         upsert globalGls;
+        // Set accounts receivable gl code to static variable to return from cache in future requests
+        glCodeAccountsReceivable = GL_CODE_AR;
         return globalGls;
     }
 
@@ -1864,13 +1876,46 @@ public class TestDataFactory {
     }
 
     /**
+     * Create a transaction for a contact in a draft status
+     * @param Contact transaction contact
+     * @return TREX1__Transaction__c Transaction
+     */
+
+     public static TREX1__Transaction__c createDraftTransaction(
+        Contact contact
+    ) {
+        if (standardTransactionRecTypeId == null) {
+            standardTransactionRecTypeId = Schema.SObjectType.TREX1__Transaction__c.getRecordTypeInfosByDeveloperName().get('Standard').getRecordTypeId();
+        }
+
+        TREX1__Transaction__c trans = new TREX1__Transaction__c();
+        trans.RecordTypeId = standardTransactionRecTypeId;
+        trans.TREX1__Account__c = contact.AccountId;
+        trans.TREX1__Contact__c = contact.Id;
+        trans.TREX1__Public_Visibility__c = true;
+        trans.TREX1__Status__c = TRANSACTION_STATUS_DRAFT;
+        insert trans;
+
+        Attachment attach = new Attachment();   	
+    	attach.Name = TRANSACTION_RECEIPT_NAME;
+    	Blob bodyBlob = Blob.valueOf('Receipt Attachment Body');
+    	attach.body = bodyBlob;
+        attach.parentId = trans.id;
+        insert attach;
+
+        return trans;
+    }
+
+    /**
      * Create a manual adjustment transaction for a contact and account, complete with 
-     * transaction line items, accounting events and journal entries
+     * transaction line items, accounting events and journal entries. All manual adjustments
+     * use accounts receivable as one side of the adjustment. Provide the other gl code to
+     * adjust and whether that account should be debited or credited.
      * @param Contact transaction contact
      * @param Decimal transaction amount
      * @param String gl code to adjust
      * @param String adjustment type - 'Debit' or 'Credit'
-     * @return List<TREX1__Transaction__c> Transactions
+     * @return TREX1__Transaction__c Transaction
      */
 
     public static TREX1__Transaction__c createManualAdjustmentTransaction(

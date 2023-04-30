@@ -1,4 +1,4 @@
-public with sharing class TA_TRecJE_SetGLAccountNameBI implements TriggerAction.BeforeInsert {
+public class TA_TRecJE_SetGLAccountNameBI implements TriggerAction.BeforeInsert {
     
     public void beforeInsert(List<TREX1__Journal_Entry__c> newList) {
         // Get map of gl codes to names from singleton utility

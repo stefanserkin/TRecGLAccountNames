@@ -22,6 +22,7 @@ public class TRecGLAccountUtility {
 
     private Map<String, String> getGlAccountMap() {
         Map<String, String> mapToReturn = new Map<String, String>();
+
         // Store all gl accounts in map
         for (TREX1__GL_Account__c glAcc : [SELECT Id, Name, TREX1__GL_Account_Number__c 
                                              FROM TREX1__GL_Account__c
@@ -29,6 +30,7 @@ public class TRecGLAccountUtility {
         {
             mapToReturn.put(glAcc.TREX1__GL_Account_Number__c, glAcc.Name);
         }
+
         // Store global accounts in map from all fields on org default record
         // Get global account org defaults
         TREX1__Global_GL_Accounts__c globalGlAccs = TREX1__Global_GL_Accounts__c.getOrgDefaults();
@@ -39,12 +41,11 @@ public class TRecGLAccountUtility {
         for (String fieldName : setGlobalAccFields) {
             Schema.DescribeFieldResult fieldResult = dsor.fields.getMap().get(fieldName).getDescribe();
             if (fieldResult.getType() == Schema.DisplayType.STRING) {
-                mapToReturn.put(
-                    (String) globalGlAccs.get(fieldName), 
-                    fieldResult.getLabel()
-                );
+                String strFieldValue = (String) globalGlAccs.get(fieldName);
+                mapToReturn.put(strFieldValue, fieldResult.getLabel());
             }
         }
+        
         return mapToReturn;
     }
 
