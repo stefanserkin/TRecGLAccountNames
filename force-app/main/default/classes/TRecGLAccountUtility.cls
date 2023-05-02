@@ -5,8 +5,8 @@
  *   * TREX1__Global_GL_Accounts__c
  ********************************************************************/
 public class TRecGLAccountUtility {
-
     private static TRecGLAccountUtility instance;
+
     public Map<String, String> mapGlCodeToName { get; private set; }
 
     private TRecGLAccountUtility() {
