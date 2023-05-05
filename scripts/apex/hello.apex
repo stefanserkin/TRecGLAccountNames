@@ -5,7 +5,9 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
+TRecGLAccountsScheduler.run();
 
+/*
 TREX1__Global_GL_Accounts__c globalAccs = TREX1__Global_GL_Accounts__c.getOrgDefaults();
 DescribeSObjectResult dsor = TREX1__Global_GL_Accounts__c.sObjectType.getDescribe();
 Set<String> setGlobalAccFields = dsor.fields.getMap().keySet();
@@ -19,7 +21,7 @@ for (String fieldName : setGlobalAccFields) {
     }
 }
 
-
+*/
 
 // String glCode;
 /*
